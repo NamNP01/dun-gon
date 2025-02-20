@@ -62,7 +62,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ffc1768c8061df4b853cb24de682bb5, type: 3}
       propertyPath: m_Name
-      value: arrow
+      value: Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5ffc1768c8061df4b853cb24de682bb5, type: 3}
+      propertyPath: m_TagString
+      value: Arow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -96,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  playerData: {fileID: 11400000, guid: 1d5062e2e07fb4c47a025467560eb3c1, type: 2}
 --- !u!65 &7012059775857811787
 BoxCollider:
   m_ObjectHideFlags: 0

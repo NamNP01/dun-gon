@@ -6,6 +6,8 @@ TagManager:
   tags:
   - NextStage
   - Monster
+  - Arrow
+  - Arow
   layers:
   - Default
   - TransparentFX

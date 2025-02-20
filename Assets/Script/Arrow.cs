@@ -4,6 +4,7 @@ public class Arrow : MonoBehaviour
 {
     public float speed = 10f; // Tốc độ bay của mũi tên
     private GameObject target;
+    public PlayerData playerData; // Lấy dữ liệu sát thương từ PlayerData
 
     public void SetTarget(GameObject newTarget)
     {
@@ -32,11 +33,19 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Mũi tên chạm vào: " + other.gameObject.name); // In ra tên đối tượng va chạm
-
         if (target != null && other.gameObject == target)
         {
-            //Debug.Log("Mũi tên trúng mục tiêu!");
+            EnemyHP enemyHP = target.GetComponent<EnemyHP>();
+            if (enemyHP != null)
+            {
+                Debug.Log("Arrow hit enemy: " + target.name);
+                enemyHP.TakeDamage(playerData.Dame);
+            }
+            else
+            {
+                Debug.LogWarning("Enemy does not have an EnemyHPBar component!");
+            }
+
             Destroy(gameObject);
         }
     }

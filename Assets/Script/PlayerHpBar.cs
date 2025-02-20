@@ -1,0 +1,68 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerHpBar : MonoBehaviour
+{
+    public static PlayerHpBar Instance // singlton     
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindAnyObjectByType<PlayerHpBar>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("PlayerHpBar");
+                    instance = instanceContainer.AddComponent<PlayerHpBar>();
+                }
+            }
+            return instance;
+        }
+    }
+    private static PlayerHpBar instance;
+
+    public Transform player;
+    public Slider hpBar;
+    public float maxHp;
+    public float currentHp;
+
+    public GameObject HpLineFolder;
+
+    public Text playerHpText;
+    float unitHp = 200f;
+
+    public Vector3 hpBarOffset = new Vector3(0, 2f, 0);  // Điều chỉnh vị trí theo ý muốn
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player")?.transform;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.position = player.position + hpBarOffset;
+        hpBar.value = currentHp / maxHp;
+        //playerHpText.text = currentHp.ToString();
+    }
+
+    public void GetHpBoost()
+    {
+        maxHp += 150;
+        currentHp += 150;
+        float scaleX = (1000f / unitHp) / (maxHp / unitHp);
+        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
+
+        foreach (Transform child in HpLineFolder.transform)
+        {
+            child.gameObject.transform.localScale = new Vector3(scaleX, 1, 1);
+        }
+
+        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
+    }
+}
