@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b088dcd2642214f81630efb563439a, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  HP: 1100
   Dame: 500
   SpeedAtk: 0

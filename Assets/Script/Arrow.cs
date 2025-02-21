@@ -40,14 +40,21 @@ public class Arrow : MonoBehaviour
             {
                 Debug.Log("Arrow hit enemy: " + target.name);
                 enemyHP.TakeDamage(playerData.Dame);
-            }
-            else
-            {
-                Debug.LogWarning("Enemy does not have an EnemyHPBar component!");
+
+                // Đẩy lùi kẻ địch
+                Rigidbody enemyRb = target.GetComponent<Rigidbody>();
+                if (enemyRb != null && enemyRb.isKinematic)
+                {
+                    Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
+                    float knockbackDistance = 0.2f; // Giảm khoảng cách đẩy lùi
+                    Vector3 newPosition = target.transform.position + knockbackDirection * knockbackDistance;
+
+                    // Dùng MovePosition thay vì thay đổi transform.position
+                    enemyRb.MovePosition(newPosition);
+                }
             }
 
             Destroy(gameObject);
         }
     }
-
 }
