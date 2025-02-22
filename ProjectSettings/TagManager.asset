@@ -7,12 +7,13 @@ TagManager:
   - NextStage
   - Monster
   - Arrow
+  - FxTemporaire
   - Arow
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - wall
+  - Wall
   - Water
   - UI
   - Enemy

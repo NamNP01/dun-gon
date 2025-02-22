@@ -4,10 +4,11 @@ using UnityEngine;
 public class EnemyHP : MonoBehaviour
 {
     public EnemyHPBar hpBar;
+    public GameObject damagePopupPrefab; // Prefab của popup sát thương
 
     public int maxHP = 1200;
     public int currentHP;
-    public int Dame=120;
+    public int Dame = 120;
 
     private bool isKnockedBack = false;
 
@@ -26,6 +27,14 @@ public class EnemyHP : MonoBehaviour
         {
             hpBar.TakeDamage(damage);
             currentHP = (int)hpBar.GetCurrentHP(); // Cập nhật máu từ hpBar về EnemyHP
+        }
+
+        // 🔥 Hiển thị Damage Popup
+        if (damagePopupPrefab != null)
+        {
+            GameObject popup = Instantiate(damagePopupPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            popup.transform.rotation = Camera.main.transform.rotation; // Xoay theo camera
+            popup.GetComponent<DamagePopup>().Setup(damage);
         }
     }
 

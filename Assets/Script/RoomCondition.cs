@@ -68,6 +68,11 @@ public class RoomCondition : MonoBehaviour
         {
             MonsterListInRoom.Add(monster);
             Debug.Log($"Thêm quái: {monster.name} vào {gameObject.name}");
+            if (PlayerTargeting.Instance != null)
+            {
+                PlayerTargeting.Instance.MonsterList = new List<GameObject>(MonsterListInRoom);
+                Debug.Log("Enter New Room! Mob Count: " + PlayerTargeting.Instance.MonsterList.Count);
+            }
         }
     }
 }

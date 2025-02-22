@@ -27,6 +27,8 @@ public class MushroomAngry : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         currentState = EnemyState.Idle;
+
+        player = GameObject.FindGameObjectWithTag("Player")?.transform; // Tìm player
     }
 
     void Update()
