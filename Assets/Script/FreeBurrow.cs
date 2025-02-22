@@ -6,6 +6,8 @@ public class FreeBurrow : MonoBehaviour
     public enum State { Move, Duplicate }
 
     public State currentState;
+
+    public float detectRange = 13f;  // Phạm vi phát hiện player
     public float duplicateCooldown = 5f; // Thời gian chờ để nhân đôi
     private float duplicateTimer;
 

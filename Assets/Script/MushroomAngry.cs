@@ -8,7 +8,7 @@ public class MushroomAngry : MonoBehaviour
     private EnemyState currentState;
 
     public Transform player;
-    public float detectRange = 10f;  // Phạm vi phát hiện player
+    public float detectRange = 13f;  // Phạm vi phát hiện player
     public float attackRange = 2f;   // Phạm vi để nhảy tấn công
     public float jumpDistance = 3f;  // Khoảng cách nhảy
     public float attackCooldown = 1.5f; // Thời gian chờ giữa các đợt tấn công
