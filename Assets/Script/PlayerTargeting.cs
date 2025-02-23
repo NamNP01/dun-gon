@@ -20,6 +20,8 @@ public class PlayerTargeting : MonoBehaviour
     public float attackSpeed = 1f; // Tốc độ bắn (1 phát mỗi giây)
     private float lastAttackTime = 0f; // Thời gian lần bắn trước
 
+    public PlayerData playerData;
+
     public Animator animator;
     void Awake()
     {
@@ -36,6 +38,15 @@ public class PlayerTargeting : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (playerData != null)
+        {
+            attackSpeed = playerData.SpeedAtk; // 🛑 Lấy attackSpeed từ PlayerData
+        }
+        else
+        {
+            Debug.LogError("PlayerData chưa được gán!");
+        }
     }
 
     void Update()

@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   HP: 1100
-  Dame: 500
-  SpeedAtk: 0
+  Damage: 500
+  SpeedAtk: 5
+  critChance: 0.1
+  critDamage: 1.4

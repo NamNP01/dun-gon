@@ -8,7 +8,7 @@ public class EnemyHP : MonoBehaviour
 
     public int maxHP = 1200;
     public int currentHP;
-    public int Dame = 120;
+    public int Damage = 120;
 
     private bool isKnockedBack = false;
 
@@ -21,7 +21,7 @@ public class EnemyHP : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool isCriticalHit)
     {
         if (hpBar != null)
         {
@@ -33,10 +33,11 @@ public class EnemyHP : MonoBehaviour
         if (damagePopupPrefab != null)
         {
             GameObject popup = Instantiate(damagePopupPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-            popup.transform.rotation = Camera.main.transform.rotation; // Xoay theo camera
-            popup.GetComponent<DamagePopup>().Setup(damage);
+            popup.transform.rotation = Camera.main.transform.rotation;
+            popup.GetComponent<DamagePopup>().Setup(damage, isCriticalHit);
         }
     }
+
 
     public float GetCurrentHP()
     {

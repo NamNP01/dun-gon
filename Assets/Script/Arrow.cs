@@ -4,7 +4,7 @@ public class Arrow : MonoBehaviour
 {
     public float speed = 10f; // Tốc độ bay của mũi tên
     private GameObject target;
-    public PlayerData playerData; // Lấy dữ liệu sát thương từ PlayerData
+    public PlayerData playerData; // Lấy dữ liệu từ PlayerData
 
     public void SetTarget(GameObject newTarget)
     {
@@ -38,8 +38,22 @@ public class Arrow : MonoBehaviour
             EnemyHP enemyHP = target.GetComponent<EnemyHP>();
             if (enemyHP != null)
             {
-                Debug.Log("Arrow hit enemy: " + target.name);
-                enemyHP.TakeDamage(playerData.Dame);
+                // Xác định xem có chí mạng hay không
+                bool isCriticalHit = Random.value < playerData.critChance;
+                int finalDamage = isCriticalHit ? Mathf.RoundToInt(playerData.Damage * playerData.critDamage) : playerData.Damage;
+
+                //// In ra log để kiểm tra
+                //if (isCriticalHit)
+                //{
+                //    Debug.Log("Critical Hit! Damage: " + finalDamage);
+                //}
+                //else
+                //{
+                //    Debug.Log("Normal Hit! Damage: " + finalDamage);
+                //}
+
+                // Gây sát thương lên kẻ địch
+                enemyHP.TakeDamage(finalDamage, isCriticalHit);
 
                 // Đẩy lùi kẻ địch
                 Rigidbody enemyRb = target.GetComponent<Rigidbody>();

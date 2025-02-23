@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHpBar : MonoBehaviour
@@ -28,7 +29,7 @@ public class PlayerHpBar : MonoBehaviour
 
     public GameObject HpLineFolder;
 
-    public Text playerHpText;
+    public TextMeshProUGUI playerHpText;
     float unitHp = 200f;
 
     public Vector3 hpBarOffset = new Vector3(0, 2f, 0);  // Điều chỉnh vị trí theo ý muốn
@@ -41,6 +42,7 @@ public class PlayerHpBar : MonoBehaviour
         {
             player = GameObject.FindWithTag("Player")?.transform;
         }
+        UpdateHpText();
     }
 
     // Update is called once per frame
@@ -48,7 +50,6 @@ public class PlayerHpBar : MonoBehaviour
     {
         transform.position = player.position + hpBarOffset;
         hpBar.value = currentHp / maxHp;
-        //playerHpText.text = currentHp.ToString();
     }
 
     public void GetHpBoost()
@@ -64,5 +65,12 @@ public class PlayerHpBar : MonoBehaviour
         }
 
         HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
+    }
+    public void UpdateHpText()
+    {
+        if (playerHpText != null)
+        {
+            playerHpText.text = currentHp.ToString(); // Chỉ hiển thị số máu
+        }
     }
 }

@@ -7,8 +7,12 @@ using UnityEngine.TextCore.Text;
 public class PlayerData : ScriptableObject
 {
     public int HP;
-    public int Dame;
-    public int SpeedAtk;
+    public int Damage;
+    public float SpeedAtk;
+    public float critChance;
+    public float critDamage;
+
+
     // Thêm các trường dữ liệu khác của người chơi tại đây
 
     
