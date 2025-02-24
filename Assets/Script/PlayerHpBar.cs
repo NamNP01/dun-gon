@@ -21,10 +21,11 @@ public class PlayerHpBar : MonoBehaviour
         }
     }
     private static PlayerHpBar instance;
+    public PlayerData playerData;
 
     public Transform player;
     public Slider hpBar;
-    public float maxHp;
+    //public float maxHp;
     public float currentHp;
 
     public GameObject HpLineFolder;
@@ -49,14 +50,15 @@ public class PlayerHpBar : MonoBehaviour
     void Update()
     {
         transform.position = player.position + hpBarOffset;
-        hpBar.value = currentHp / maxHp;
+        hpBar.value = currentHp / playerData.HP;
     }
 
     public void GetHpBoost()
     {
-        maxHp += 150;
+        playerData.HP += 150;
         currentHp += 150;
-        float scaleX = (1000f / unitHp) / (maxHp / unitHp);
+        UpdateHpText();
+        float scaleX = (1000f / unitHp) / (playerData.HP / unitHp);
         HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
 
         foreach (Transform child in HpLineFolder.transform)

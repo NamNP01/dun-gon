@@ -8,12 +8,19 @@ public class DamagePopup : MonoBehaviour
     private Color textColor;
     private Vector3 originalScale;
 
+    private void Awake()
+    {
+        originalScale = transform.localScale; // Lưu lại kích thước gốc
+    }
+
     public void Setup(int damageAmount, bool isCriticalHit)
     {
+        // 🔥 Đặt lại giá trị ban đầu
+        ResetPopup();
+
         damageText.text = "-" + damageAmount.ToString();
         textColor = damageText.color;
         disappearTimer = 1f; // Thời gian tồn tại
-        originalScale = transform.localScale;
 
         if (isCriticalHit)
         {
@@ -35,7 +42,20 @@ public class DamagePopup : MonoBehaviour
             textColor.a -= fadeSpeed * Time.deltaTime;
             damageText.color = textColor;
 
-            if (textColor.a <= 0) Destroy(gameObject);
+            if (textColor.a <= 0) ReturnToPool();
         }
+    }
+
+    private void ReturnToPool()
+    {
+        DamagePopupPool.Instance.ReturnPopup(gameObject);
+    }
+
+    private void ResetPopup()
+    {
+        // 🔥 Reset trạng thái ban đầu
+        damageText.color = Color.white; // Reset màu về trắng
+        transform.localScale = originalScale; // Reset kích thước
+        textColor.a = 1f; // Đặt lại độ trong suốt
     }
 }

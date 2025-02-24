@@ -4,7 +4,7 @@ public class PlayerHP : MonoBehaviour
 {
     public PlayerHpBar hpBar;
     public PlayerData playerData; // 🛑 Thêm biến tham chiếu PlayerData
-    public float currentHP;
+    public int currentHP;
     public GameObject damagePopupPrefab;
 
     void Start()
@@ -20,7 +20,7 @@ public class PlayerHP : MonoBehaviour
 
         if (hpBar != null)
         {
-            hpBar.maxHp = currentHP;
+            playerData.HP = currentHP;
             hpBar.currentHp = currentHP;
             hpBar.UpdateHpText();
         }
@@ -61,7 +61,7 @@ public class PlayerHP : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage, bool isCriticalHit = false)
+    public void TakeDamage(int damage, bool isCriticalHit = false)
     {
         currentHP -= damage;
         currentHP = Mathf.Max(0, currentHP);

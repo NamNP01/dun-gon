@@ -17,7 +17,7 @@ public class PlayerTargeting : MonoBehaviour
     private Rigidbody rb;
 
     public float stopThreshold = 0.1f; // Ngưỡng tốc độ để coi là dừng
-    public float attackSpeed = 1f; // Tốc độ bắn (1 phát mỗi giây)
+    //public float attackSpeed = 1f; // Tốc độ bắn (1 phát mỗi giây)
     private float lastAttackTime = 0f; // Thời gian lần bắn trước
 
     public PlayerData playerData;
@@ -41,7 +41,7 @@ public class PlayerTargeting : MonoBehaviour
 
         if (playerData != null)
         {
-            attackSpeed = playerData.SpeedAtk; // 🛑 Lấy attackSpeed từ PlayerData
+            //attackSpeed = playerData.SpeedAtk; // 🛑 Lấy attackSpeed từ PlayerData
         }
         else
         {
@@ -116,14 +116,14 @@ public class PlayerTargeting : MonoBehaviour
     void AttackTarget()
     {
         if (TargetIndex == -1) return;
-        if (Time.time - lastAttackTime < 1f / attackSpeed) return;
+        if (Time.time - lastAttackTime < 1f / playerData.SpeedAtk) return;
         if (rb.linearVelocity.magnitude > stopThreshold) return;
         if (animator.GetBool("isMoving")) return; // Nếu đang di chuyển, không tấn công
 
         lastAttackTime = Time.time;
 
         // Cập nhật AttackSpeed theo attackRate
-        animator.SetFloat("AttackSpeed", attackSpeed/2);
+        animator.SetFloat("AttackSpeed", playerData.SpeedAtk / 2);
 
         // Xoay nhân vật về phía mục tiêu trước khi bắn
         GameObject target = MonsterList[TargetIndex];

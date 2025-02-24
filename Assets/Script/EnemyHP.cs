@@ -30,9 +30,10 @@ public class EnemyHP : MonoBehaviour
         }
 
         // 🔥 Hiển thị Damage Popup
-        if (damagePopupPrefab != null)
+        if (DamagePopupPool.Instance != null)
         {
-            GameObject popup = Instantiate(damagePopupPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            GameObject popup = DamagePopupPool.Instance.GetPopup();
+            popup.transform.position = transform.position + Vector3.up * 2;
             popup.transform.rotation = Camera.main.transform.rotation;
             popup.GetComponent<DamagePopup>().Setup(damage, isCriticalHit);
         }
