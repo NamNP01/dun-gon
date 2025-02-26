@@ -8,6 +8,9 @@ public class PlayerData : ScriptableObject
     public float SpeedAtk;
     public float critChance;
     public float critDamage;
+    public float Exp;
+    public int Level = 1;
+    public int ExpToNextLevel; // 🔥 EXP cần để lên cấp
 
     // Lưu giá trị gốc
     private int originalHP;
@@ -15,6 +18,9 @@ public class PlayerData : ScriptableObject
     private float originalSpeedAtk;
     private float originalCritChance;
     private float originalCritDamage;
+    private float originalExp;
+    private int originalLevel = 1;
+    private int originalExpToNextLevel;
 
     private void OnEnable()
     {
@@ -24,6 +30,9 @@ public class PlayerData : ScriptableObject
         originalSpeedAtk = SpeedAtk;
         originalCritChance = critChance;
         originalCritDamage = critDamage;
+        originalExp = Exp;
+        originalLevel = Level;
+        originalExpToNextLevel = ExpToNextLevel;
     }
 
     public void ResetStats()
@@ -34,5 +43,27 @@ public class PlayerData : ScriptableObject
         SpeedAtk = originalSpeedAtk;
         critChance = originalCritChance;
         critDamage = originalCritDamage;
+        Exp = originalExp;
+        Level = originalLevel;
+        ExpToNextLevel = originalExpToNextLevel;
+
+    }
+    public void GainExp(int amount)
+    {
+        Exp += amount;
+        Debug.Log("Gained " + amount + " EXP. Total: " + Exp);
+
+        if (Exp >= ExpToNextLevel)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        Level++;
+        Exp -= ExpToNextLevel;
+        ExpToNextLevel += 5; // 🔥 EXP cần để lên cấp tăng dần
+        Debug.Log("Leveled Up! New Level: " + Level);
     }
 }

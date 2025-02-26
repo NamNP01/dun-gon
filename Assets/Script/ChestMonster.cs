@@ -51,12 +51,18 @@ public class ChestMonsterFSM : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(attackInterval);
+
             if (!isAttacking && player != null)
             {
-                StartCoroutine(AttackState());
+                float distance = (player.position - transform.position).sqrMagnitude;
+                if (distance <= detectRange * detectRange) // Kiểm tra lại khoảng cách
+                {
+                    StartCoroutine(AttackState());
+                }
             }
         }
     }
+
 
     IEnumerator AttackState()
     {
@@ -204,7 +210,7 @@ public class ChestMonsterFSM : MonoBehaviour
     }
 
     // 🔹 Vẽ phạm vi detectRange trên Scene
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectRange);

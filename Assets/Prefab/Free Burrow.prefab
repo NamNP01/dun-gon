@@ -955,9 +955,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2904661
-  m_Height: 1
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.49507132, z: 0.0045550787}
+  m_Center: {x: 0, y: 0.5, z: 0.0045550787}
 --- !u!114 &1707013514460838839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,11 +970,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad2d881e0ddd7042b6f3945177a7962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 1d5062e2e07fb4c47a025467560eb3c1, type: 2}
   hpBar: {fileID: 4964872136854253097}
   damagePopupPrefab: {fileID: 4080443137243303530, guid: c24e09737ffb59843b4e98b147380a35, type: 3}
   maxHP: 1200
   currentHP: 0
-  Dame: 120
+  Damage: 120
+  expReward: 1
 --- !u!114 &6331236631345767920
 MonoBehaviour:
   m_ObjectHideFlags: 0

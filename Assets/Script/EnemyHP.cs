@@ -1,8 +1,11 @@
 ﻿using System.Collections;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class EnemyHP : MonoBehaviour
 {
+    public PlayerData playerData;
+
     public EnemyHPBar hpBar;
     public GameObject damagePopupPrefab; // Prefab của popup sát thương
 
@@ -10,10 +13,17 @@ public class EnemyHP : MonoBehaviour
     public int currentHP;
     public int Damage = 120;
 
+    public int expReward = 1; // 🔥 EXP rơi ra khi chết
+
     private bool isKnockedBack = false;
+    private bool isDead = false;
+
+    private BigFreeBurrow bigFreeBurrow;
 
     void Start()
     {
+        bigFreeBurrow = GetComponent<BigFreeBurrow>();
+
         currentHP = maxHP; // Khởi tạo máu ban đầu
         if (hpBar != null)
         {
@@ -36,6 +46,16 @@ public class EnemyHP : MonoBehaviour
             popup.transform.position = transform.position + Vector3.up * 2;
             popup.transform.rotation = Camera.main.transform.rotation;
             popup.GetComponent<DamagePopup>().Setup(damage, isCriticalHit);
+        }
+
+        if (bigFreeBurrow != null)
+        {
+            //bigFreeBurrow.OnTakeDamage();
+        }
+
+        if (currentHP <= 0)
+        {
+            Die();
         }
     }
 
@@ -70,4 +90,18 @@ public class EnemyHP : MonoBehaviour
         transform.position = targetPosition;
         isKnockedBack = false;
     }
+    private void Die()
+    {
+        if (isDead) return; 
+
+        isDead = true; 
+        // 🔥 Cộng EXP cho người chơi khi enemy chết
+        if (playerData != null)
+        {
+            playerData.GainExp(expReward);
+        }
+
+        Destroy(gameObject); // Xóa enemy khỏi game
+    }
+
 }

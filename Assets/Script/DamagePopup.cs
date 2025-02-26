@@ -25,7 +25,7 @@ public class DamagePopup : MonoBehaviour
         if (isCriticalHit)
         {
             damageText.color = Color.red; // Màu đỏ nếu chí mạng
-            transform.localScale = originalScale * 1.2f; // To hơn 1.2 lần
+            transform.localScale = originalScale * 1.5f; // To hơn 1.2 lần
         }
     }
 

@@ -7,6 +7,9 @@ public class PlayerHP : MonoBehaviour
     public int currentHP;
     public GameObject damagePopupPrefab;
 
+
+    public GameObject GameOver;
+
     void Start()
     {
         if (playerData != null)
@@ -98,5 +101,7 @@ public class PlayerHP : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player đã chết!");
+        Time.timeScale = 0f;
+        GameOver.SetActive(true);
     }
 }
