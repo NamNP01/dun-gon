@@ -26,7 +26,7 @@ public class BigFreeBurrow : MonoBehaviour
     private Animator animator;
     private NavMeshAgent agent;
     private EnemyHP enemyHP;
-    private bool isAttacking = false;
+    //private bool isAttacking = false;
     private Vector3 targetPosition;
     private bool isMoving = false;
     public int lastHP; // Lưu HP lần cuối
@@ -102,7 +102,7 @@ public class BigFreeBurrow : MonoBehaviour
     IEnumerator ShootProjectiles()
     {
         currentState = State.Shoot;
-        isAttacking = true;
+        //isAttacking = true;
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < projectileCount; i++)
@@ -125,7 +125,7 @@ public class BigFreeBurrow : MonoBehaviour
         }
 
         yield return new WaitForSeconds(attackCooldown);
-        isAttacking = false;
+        //isAttacking = false;
 
         // Sau khi tấn công xong, di chuyển tiếp
         MoveToRandomPosition();

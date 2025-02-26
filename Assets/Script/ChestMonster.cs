@@ -178,6 +178,7 @@ public class ChestMonsterFSM : MonoBehaviour
         foreach (Vector3 dir in directions)
         {
             GameObject projectile = Instantiate(attackPrefab, position, Quaternion.identity);
+            Destroy(projectile, 5f); // Hủy viên đạn sau 10 giây
             // 🔥 Gán Dame từ EnemyHP vào Damage của WebProjectile
             CoinProjectile webProjectile = projectile.GetComponent<CoinProjectile>();
             EnemyHP enemyHP = GetComponent<EnemyHP>(); // Lấy EnemyHP từ SpiderEn
