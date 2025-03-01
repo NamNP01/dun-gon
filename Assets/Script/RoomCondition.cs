@@ -7,6 +7,10 @@ public class RoomCondition : MonoBehaviour
     public bool playerInThisRoom = false;
     public bool isClearRoom = false;
 
+    [Header("Đổi Material khi Clear Room")]
+    public GameObject targetObject;  // GameObject cần đổi Material
+    public Material clearedMaterial; // Material mới
+
     void Update()
     {
         if (playerInThisRoom && !isClearRoom && MonsterListInRoom.Count == 0)
@@ -19,6 +23,17 @@ public class RoomCondition : MonoBehaviour
             {
                 PlayerTargeting.Instance.MonsterList.Clear();
                 Debug.Log("Target List Cleared!");
+            }
+
+            // Đổi Material nếu có targetObject và Material mới
+            if (targetObject != null && clearedMaterial != null)
+            {
+                Renderer rend = targetObject.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    rend.material = clearedMaterial;
+                    Debug.Log("Đã đổi Material của " + targetObject.name);
+                }
             }
         }
     }

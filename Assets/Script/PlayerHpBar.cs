@@ -53,11 +53,12 @@ public class PlayerHpBar : MonoBehaviour
         hpBar.value = currentHp / playerData.HP;
     }
 
-    public void GetHpBoost()
+    public void GetHpBoost(int hpAmount)
     {
-        playerData.HP += 150;
-        currentHp += 150;
+        playerData.HP += hpAmount;
+        currentHp += hpAmount;
         UpdateHpText();
+
         float scaleX = (1000f / unitHp) / (playerData.HP / unitHp);
         HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
 
