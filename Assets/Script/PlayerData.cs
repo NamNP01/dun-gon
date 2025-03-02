@@ -12,6 +12,7 @@ public class PlayerData : ScriptableObject
     public float Exp;
     public int Level;
     public int ExpToNextLevel; // 🔥 EXP cần để lên cấp
+    public bool hasDiagonalArrows = false;
 
 
     // Lưu giá trị gốc
@@ -49,8 +50,9 @@ public class PlayerData : ScriptableObject
         Level = 1;
         Exp = 0;
         ExpToNextLevel = 5;
+        hasDiagonalArrows = false;
 
-    }
+}
 
 
     public void GainExp(int amount)
@@ -114,6 +116,31 @@ public class PlayerData : ScriptableObject
                 }
 
                 Debug.Log($"❤️ Tăng {hpIncrease} HP! Tổng HP: {HP}");
+                break;
+
+            case AbilityType.FrontArrowPlusOne:
+                PlayerTargeting.Instance.ChangeBoltPrefab();
+                Debug.Log("🏹 Đạn đã thay đổi sang loại mới!");
+                break;
+
+            case AbilityType.Multishot:
+
+                // 🎯 Thêm mũi tên theo hướng hiện tại
+                //PlayerTargeting.Instance.AddMultishotArrow();
+
+                // ⚠ Giảm Damage & Attack Speed dựa trên giá trị gốc
+                int damageReduction = Mathf.RoundToInt(originalDamage * 0.1f);
+                float speedReduction = originalSpeedAtk * 0.15f;
+
+                Damage -= damageReduction;
+                SpeedAtk -= speedReduction;
+
+                Debug.Log($"⚠ Giảm {damageReduction} Damage & {speedReduction:F2} Attack Speed! Tổng Damage: {Damage}, Speed: {SpeedAtk}");
+                break;
+
+            case AbilityType.DiagonalArrows:
+                hasDiagonalArrows = true;
+                Debug.Log("🏹 Đã kích hoạt Diagonal Arrows!");
                 break;
         }
     }

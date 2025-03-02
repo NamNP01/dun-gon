@@ -11,6 +11,10 @@ public class PlayerTargeting : MonoBehaviour
 
     public GameObject PlayerBolt;
     public Transform AttackPoint;
+    private int currentBoltIndex = 0; // Vị trí hiện tại trong danh sách Prefab
+    public List<GameObject> boltPrefabs = new List<GameObject>(); // Danh sách Prefab đạn có thể đổi
+    public GameObject diagonalArrowPrefab; // Prefab của mũi tên phụ (được đặt trong Inspector)
+
 
     private int TargetIndex = -1;
     private float TargetDist = 100f;
@@ -146,16 +150,43 @@ public class PlayerTargeting : MonoBehaviour
         GameObject target = MonsterList[TargetIndex];
         if (target == null) return;
 
-        // Tạo mũi tên và hướng nó về mục tiêu
-        GameObject arrow = Instantiate(PlayerBolt, AttackPoint.position, Quaternion.identity);
+        // Bắn mũi tên chính (có script `Arrow`)
+        FireArrow(PlayerBolt, 0,  target);
 
-        //// Xoay mũi tên theo hướng từ nhân vật đến mục tiêu
-        //Vector3 direction = (target.transform.position - AttackPoint.position).normalized;
-        //arrow.transform.forward = direction;
-
-        // Gửi thông tin mục tiêu cho mũi tên
-        arrow.GetComponent<Arrow>().SetTarget(target);
+        // Nếu có Diagonal Arrows, bắn thêm 2 mũi tên phụ
+        if (playerData.hasDiagonalArrows && diagonalArrowPrefab != null)
+        {
+            FireArrow(diagonalArrowPrefab, 45,  target);
+            FireArrow(diagonalArrowPrefab, -45,  target);
+        }
     }
+
+    // Hàm bắn mũi tên (chính & phụ)
+    private void FireArrow(GameObject arrowPrefab, float angleOffset, GameObject target)
+    {
+        if (arrowPrefab == null)
+        {
+            Debug.LogWarning("⚠ Prefab mũi tên không hợp lệ!");
+            return;
+        }
+
+        GameObject arrow = Instantiate(arrowPrefab, AttackPoint.position, Quaternion.identity);
+        Vector3 direction = (target.transform.position - AttackPoint.position).normalized;
+        direction = Quaternion.Euler(0, angleOffset, 0) * direction; // Xoay góc 45 độ
+
+        if (arrow.GetComponent<Arrow>() != null)
+        {
+            // Nếu là mũi tên chính, dùng script Arrow
+            arrow.GetComponent<Arrow>().SetTarget(target);
+        }
+        else if (arrow.GetComponent<DiagonalArrow>() != null)
+        {
+            // Nếu là mũi tên phụ, dùng script mới
+            arrow.GetComponent<DiagonalArrow>().SetDirection(direction);
+        }
+    }
+
+
     void RotateTowardsTarget()
     {
         if (TargetIndex == -1) return; // Không có mục tiêu nào
@@ -170,5 +201,17 @@ public class PlayerTargeting : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
+    public void ChangeBoltPrefab()
+    {
+        if (boltPrefabs.Count == 0)
+        {
+            Debug.LogWarning("⚠ Danh sách Prefab đạn rỗng! Không thể đổi.");
+            return;
+        }
 
+        currentBoltIndex = (currentBoltIndex + 1) % boltPrefabs.Count; // Đổi sang Prefab tiếp theo
+        PlayerBolt = boltPrefabs[currentBoltIndex]; // Cập nhật Prefab đạn
+
+        Debug.Log($"🔄 Đạn đã được thay đổi! Hiện tại: {PlayerBolt.name}");
+    }
 }

@@ -15,6 +15,8 @@ public class AbilityManager : MonoBehaviour
 
     private List<AbilityData> selectedAbilities = new List<AbilityData>();
 
+    private Dictionary<AbilityType, int> abilityCounts = new Dictionary<AbilityType, int>();
+
     private void Awake()
     {
         if (Instance == null)
@@ -50,7 +52,12 @@ public class AbilityManager : MonoBehaviour
         abilityPanel.SetActive(true);
         selectedAbilities.Clear();
 
-
+        // 🌟 Xóa các Ability đã đạt giới hạn khỏi danh sách chính
+        allAbilities.RemoveAll(ability =>
+        {
+            int currentCount = abilityCounts.ContainsKey(ability.abilityType) ? abilityCounts[ability.abilityType] : 0;
+            return ability.maxAllowedCount > 0 && currentCount >= ability.maxAllowedCount;
+        });
 
         List<AbilityData> tempList = new List<AbilityData>(allAbilities);
         for (int i = 0; i < 3 && tempList.Count > 0; i++)
@@ -127,6 +134,14 @@ public class AbilityManager : MonoBehaviour
                 buttonImage.DOFade(0, 0.3f).SetUpdate(true); // 🔥 Mờ dần ngay cả khi pause game
             }
         }
+        // 🌟 Cập nhật bộ đếm cho Ability đã chọn
+        if (!abilityCounts.ContainsKey(ability.abilityType))
+        {
+            abilityCounts[ability.abilityType] = 0;
+        }
+        abilityCounts[ability.abilityType]++;
+
+        Debug.Log($"🔢 {ability.abilityName} đã chọn {abilityCounts[ability.abilityType]}/{ability.maxAllowedCount}");
 
         // 🌟 Delay một chút rồi tắt panel
         DOVirtual.DelayedCall(0.65f, () =>
