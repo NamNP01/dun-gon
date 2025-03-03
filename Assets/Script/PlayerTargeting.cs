@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerTargeting : MonoBehaviour
@@ -14,6 +15,17 @@ public class PlayerTargeting : MonoBehaviour
     private int currentBoltIndex = 0; // Vị trí hiện tại trong danh sách Prefab
     public List<GameObject> boltPrefabs = new List<GameObject>(); // Danh sách Prefab đạn có thể đổi
     public GameObject diagonalArrowPrefab; // Prefab của mũi tên phụ (được đặt trong Inspector)
+    public List<GameObject> diagonalArrowPrefabs = new List<GameObject>(); // Danh sách các Prefab mũi tên chéo
+    private int currentDiagonalArrowIndex = 0; // Vị trí hiện tại
+    public GameObject sideArrowPrefab;
+    public List<GameObject> sideArrowPrefabs = new List<GameObject>();
+    private int currentSideArrowIndex = 0;
+    public GameObject rearArrowPrefab;
+    public List<GameObject> rearArrowPrefabs = new List<GameObject>();
+    private int currentRearArrowIndex = 0;
+
+
+
 
 
     private int TargetIndex = -1;
@@ -81,16 +93,19 @@ public class PlayerTargeting : MonoBehaviour
         {
             if (MonsterList[i] == null) continue;
 
-            Vector3 direction = (MonsterList[i].transform.position - transform.position).normalized;
+            Vector3 direction = (MonsterList[i].transform.position - transform.position);
+            direction.y = 0; // Giữ trục Y cố định
+            direction = direction.normalized; // Chuẩn hóa vector sau khi đặt y = 0
+
             float currentDist = Vector3.Distance(transform.position, MonsterList[i].transform.position);
             RaycastHit hit;
 
             // Kiểm tra Raycast
-            if (Physics.Raycast(transform.position, direction, out hit, 20f, layerMask))
+            if (Physics.Raycast(transform.position + Vector3.up * 1f, direction, out hit, 20f, layerMask))
             {
                 if (hit.transform.CompareTag("Monster"))
                 {
-                    Debug.DrawRay(transform.position, direction * 20f, Color.red); // Tất cả mục tiêu
+                    Debug.DrawRay(transform.position + Vector3.up * 1f, direction * 20f, Color.red); // Tất cả mục tiêu
 
                     if (currentDist < TargetDist)
                     {
@@ -101,7 +116,7 @@ public class PlayerTargeting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.DrawRay(transform.position, direction * 20f, Color.yellow); // Bị chặn bởi vật cản
+                    Debug.DrawRay(transform.position + Vector3.up * 1f, direction * 20f, Color.yellow); // Bị chặn bởi vật cản
                 }
             }
         }
@@ -109,8 +124,10 @@ public class PlayerTargeting : MonoBehaviour
         // Nếu có mục tiêu gần nhất mà không bị che, vẽ màu xanh lá
         if (closestValidTarget != null)
         {
-            Vector3 closestDirection = (closestValidTarget.transform.position - transform.position).normalized;
-            Debug.DrawRay(transform.position, closestDirection * 20f, Color.green);
+            Vector3 closestDirection = (closestValidTarget.transform.position - transform.position);
+            closestDirection.y = 0; // Giữ trục Y cố định
+            closestDirection = closestDirection.normalized;
+            Debug.DrawRay(transform.position + Vector3.up * 1f, closestDirection * 20f, Color.green);
         }
 
         getATarget = (TargetIndex != -1);
@@ -141,24 +158,48 @@ public class PlayerTargeting : MonoBehaviour
         // Kích hoạt animation tấn công
         animator.SetTrigger("Attack");
     }
+    public void ShootArrowFromAnimation()
+    {
+        ShootArrow(false); // Gọi hàm chính và đánh dấu đây không phải Multishot
+    }
 
-
-    public void ShootArrow()
+    public void ShootArrow(bool isFromMultishot = false)
     {
         if (TargetIndex == -1) return;
 
         GameObject target = MonsterList[TargetIndex];
         if (target == null) return;
 
+
+
         // Bắn mũi tên chính (có script `Arrow`)
         FireArrow(PlayerBolt, 0,  target);
-
+        // Nếu có Multishot và đây không phải là lần bắn từ Multishot, bắn thêm một lần nữa
+        if (playerData.hasMultishot && !isFromMultishot)
+        {
+            StartCoroutine(MultishotDelay()); // Thay vì gọi ngay, ta sẽ delay rồi mới bắn
+        }
         // Nếu có Diagonal Arrows, bắn thêm 2 mũi tên phụ
         if (playerData.hasDiagonalArrows && diagonalArrowPrefab != null)
         {
             FireArrow(diagonalArrowPrefab, 45,  target);
             FireArrow(diagonalArrowPrefab, -45,  target);
         }
+        if (playerData.hasSideArrows && sideArrowPrefab != null)
+        {
+            FireArrow(sideArrowPrefab, 90, target);
+            FireArrow(sideArrowPrefab, -90, target);
+        }        
+        if (playerData.hasSideArrows && sideArrowPrefab != null)
+        {
+            FireArrow(sideArrowPrefab, 90, target);
+            FireArrow(sideArrowPrefab, -90, target);
+        }
+        if (playerData.hasRearArrow && rearArrowPrefab != null)
+        {
+            FireArrow(rearArrowPrefab, 180, target);
+        }
+
     }
 
     // Hàm bắn mũi tên (chính & phụ)
@@ -213,5 +254,51 @@ public class PlayerTargeting : MonoBehaviour
         PlayerBolt = boltPrefabs[currentBoltIndex]; // Cập nhật Prefab đạn
 
         Debug.Log($"🔄 Đạn đã được thay đổi! Hiện tại: {PlayerBolt.name}");
+    }
+
+    public void ChangeDiagonalArrowPrefab()
+    {
+        if (diagonalArrowPrefabs.Count == 0)
+        {
+            Debug.LogWarning("⚠ Không có Prefab nào cho Diagonal Arrows!");
+            return;
+        }
+
+        currentDiagonalArrowIndex = (currentDiagonalArrowIndex + 1) % diagonalArrowPrefabs.Count;
+        diagonalArrowPrefab = diagonalArrowPrefabs[currentDiagonalArrowIndex];
+
+        Debug.Log($"🔄 Mũi tên chéo đã đổi sang: {diagonalArrowPrefab.name}");
+    }
+    public void ChangeSideArrowPrefab()
+    {
+        if (sideArrowPrefabs.Count == 0)
+        {
+            Debug.LogWarning("⚠ Không có Prefab nào cho Side Arrows!");
+            return;
+        }
+
+        currentSideArrowIndex = (currentSideArrowIndex + 1) % sideArrowPrefabs.Count;
+        sideArrowPrefab = sideArrowPrefabs[currentSideArrowIndex];
+
+        Debug.Log($"🔄 Mũi tên ngang đã đổi sang: {sideArrowPrefab.name}");
+    }
+    public void ChangeRearArrowPrefab()
+    {
+        if (rearArrowPrefabs.Count == 0)
+        {
+            Debug.LogWarning("⚠ Không có Prefab nào cho Rear Arrows!");
+            return;
+        }
+
+        currentRearArrowIndex = (currentRearArrowIndex + 1) % rearArrowPrefabs.Count;
+        rearArrowPrefab = rearArrowPrefabs[currentRearArrowIndex];
+
+        Debug.Log($"🔄 Mũi tên phía sau đã đổi sang: {rearArrowPrefab.name}");
+    }
+    // 🏹 Bắn thêm một lần nữa sau 0.2 giây (chỉ bắn lại một lần)
+    private IEnumerator MultishotDelay()
+    {
+        yield return new WaitForSeconds(0.2f);
+        ShootArrow(true); // Bắn lần thứ hai nhưng không gọi lại Multishot
     }
 }

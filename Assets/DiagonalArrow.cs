@@ -21,12 +21,4 @@ public class DiagonalArrow : MonoBehaviour
     {
         transform.position += moveDirection * speed * Time.deltaTime; // Di chuyển theo hướng đã đặt
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-        {
-            Destroy(gameObject); // Nếu chạm tường, hủy mũi tên
-        }
-    }
 }

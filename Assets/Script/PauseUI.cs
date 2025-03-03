@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -64,6 +64,12 @@ public class PauseUI : MonoBehaviour
     }
     public void PlayAgain()
     {
+        // Tìm PlayerHP và tắt GameOver nếu tìm thấy
+        PlayerHP playerHP = FindFirstObjectByType<PlayerHP>();
+        if (playerHP != null && playerHP.GameOver != null)
+        {
+            playerHP.GameOver.SetActive(false);
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1f;
         IsPaused = false;

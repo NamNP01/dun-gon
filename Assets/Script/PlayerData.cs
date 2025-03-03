@@ -13,6 +13,16 @@ public class PlayerData : ScriptableObject
     public int Level;
     public int ExpToNextLevel; // 🔥 EXP cần để lên cấp
     public bool hasDiagonalArrows = false;
+    public bool hasSideArrows = false;
+    public bool hasRearArrow = false;
+    public bool hasMultishot = false;
+    public bool hasPiercingShot = false;
+    public bool hasRicochet = false; // 🌟 Kích hoạt kỹ năng Ricochet
+    public bool hasBouncyWall = false;
+
+
+
+
 
 
     // Lưu giá trị gốc
@@ -51,8 +61,13 @@ public class PlayerData : ScriptableObject
         Exp = 0;
         ExpToNextLevel = 5;
         hasDiagonalArrows = false;
-
-}
+        hasSideArrows = false;
+        hasRearArrow = false;
+        hasMultishot = false;
+        hasPiercingShot = false;
+        hasRicochet = false;
+        hasBouncyWall = false;
+    }
 
 
     public void GainExp(int amount)
@@ -125,8 +140,11 @@ public class PlayerData : ScriptableObject
 
             case AbilityType.Multishot:
 
-                // 🎯 Thêm mũi tên theo hướng hiện tại
-                //PlayerTargeting.Instance.AddMultishotArrow();
+                if (!hasMultishot)
+                {
+                    hasMultishot = true;
+                    Debug.Log("🏹 Kỹ năng Multishot được kích hoạt!");
+                }
 
                 // ⚠ Giảm Damage & Attack Speed dựa trên giá trị gốc
                 int damageReduction = Mathf.RoundToInt(originalDamage * 0.1f);
@@ -139,9 +157,59 @@ public class PlayerData : ScriptableObject
                 break;
 
             case AbilityType.DiagonalArrows:
-                hasDiagonalArrows = true;
-                Debug.Log("🏹 Đã kích hoạt Diagonal Arrows!");
+                if (!hasDiagonalArrows)
+                {
+                    // Lần đầu tiên nâng cấp, kích hoạt bắn mũi tên phụ
+                    hasDiagonalArrows = true;
+                    Debug.Log("🏹 Đã kích hoạt Diagonal Arrows!");
+                }
+                else
+                {
+                    // Những lần sau, thay đổi prefab của mũi tên phụ
+                    PlayerTargeting.Instance.ChangeDiagonalArrowPrefab();
+                    Debug.Log("🔄 Đã thay đổi đạn phụ!");
+                }
                 break;
+
+            case AbilityType.SideArrowsPlusOne:
+                if (!hasSideArrows)
+                {
+                    hasSideArrows = true;
+                    Debug.Log("🏹 Đã kích hoạt Side Arrows +1!");
+                }
+                else
+                {
+                    PlayerTargeting.Instance.ChangeSideArrowPrefab();
+                    Debug.Log("🔄 Đã thay đổi đạn Side Arrows!");
+                }
+                break;
+
+            case AbilityType.RearArrowPlusOne:
+                if (!hasRearArrow)
+                {
+                    hasRearArrow = true;
+                    Debug.Log("🏹 Đã kích hoạt Rear Arrow +1!");
+                }
+                else
+                {
+                    PlayerTargeting.Instance.ChangeRearArrowPrefab();
+                    Debug.Log("🔄 Đã thay đổi đạn Rear Arrow!");
+                }
+                break;
+
+            case AbilityType.PiercingShot:
+                if (!hasPiercingShot)
+                {
+                    hasPiercingShot = true;
+                    Debug.Log("🏹 Kỹ năng Piercing Shot được kích hoạt!");
+                }
+                break;
+
+            case AbilityType.BouncyWall:
+                hasBouncyWall = true;
+                Debug.Log("🏹 Kỹ năng Bouncy Wall được kích hoạt!");
+                break;
+
         }
     }
 }

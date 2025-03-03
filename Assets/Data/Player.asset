@@ -21,3 +21,9 @@ MonoBehaviour:
   Level: 1
   ExpToNextLevel: 5
   hasDiagonalArrows: 0
+  hasSideArrows: 0
+  hasRearArrow: 0
+  hasMultishot: 0
+  hasPiercingShot: 0
+  hasRicochet: 0
+  hasBouncyWall: 0
