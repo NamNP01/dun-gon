@@ -1,9 +1,12 @@
-﻿using System.Buffers.Text;
+﻿using System;
+using System.Buffers.Text;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Player Data", menuName = "Data/Player Data")]
 public class PlayerData : ScriptableObject
 {
+    public static event Action OnLevelUp; // 🔥 Sự kiện khi người chơi lên cấp
+
     public int HP;
     public int Damage;
     public float SpeedAtk;
@@ -90,6 +93,10 @@ public class PlayerData : ScriptableObject
         ExpToNextLevel += 5; // 🔥 EXP cần để lên cấp tăng dần
         Debug.Log("Leveled Up! New Level: " + Level);
 
+        if (PlayerHP.Instance != null)
+        {
+            PlayerHP.Instance.PlayLevelUpVFX();
+        }
 
         if (AbilityManager.Instance != null)
         {
@@ -99,6 +106,7 @@ public class PlayerData : ScriptableObject
         {
             Debug.LogWarning("⚠ AbilityManager chưa được khởi tạo!");
         }
+        OnLevelUp?.Invoke(); // Gọi sự kiện khi lên cấp
     }
     public void ApplyAbilityEffect(AbilityData ability)
     {
@@ -208,6 +216,32 @@ public class PlayerData : ScriptableObject
             case AbilityType.BouncyWall:
                 hasBouncyWall = true;
                 Debug.Log("🏹 Kỹ năng Bouncy Wall được kích hoạt!");
+                break;
+
+            case AbilityType.Heal:
+                if (PlayerHP.Instance != null)
+                {
+                    int healAmount = Mathf.RoundToInt(HP * 0.4f);
+                    PlayerHP.Instance.Heal(healAmount);
+                }
+                break;
+
+            case AbilityType.CritMasterMinor:
+                critChance += 0.05f;  // ✅ Tăng 5% crit chance
+                critDamage += 0.2f;   // ✅ Tăng 20% crit damage
+                Debug.Log($"🎯 Crit Master (Minor): +5% Crit Chance & +20% Crit Damage! Crit Chance: {critChance * 100}%, Crit Damage: {critDamage * 100}%");
+                break;
+
+            case AbilityType.AttackBoostMinor:
+                int attackIncrease = Mathf.RoundToInt(originalDamage * 0.15f); // ✅ 15% base damage
+                Damage += attackIncrease;
+                Debug.Log($"💥 Attack Boost (Minor): +{attackIncrease} Damage! Tổng Damage: {Damage}");
+                break;
+
+            case AbilityType.AttackSpeedBoostMinor:
+                float attackSpeedIncrease = originalSpeedAtk * 0.125f; // ✅ 12.5% base attack speed
+                SpeedAtk += attackSpeedIncrease;
+                Debug.Log($"⚡ Attack Speed Boost (Minor): +{attackSpeedIncrease:F2} Attack Speed! Tổng Speed: {SpeedAtk}");
                 break;
 
         }

@@ -25,7 +25,8 @@ public class PlayerTargeting : MonoBehaviour
     private int currentRearArrowIndex = 0;
 
 
-
+    public AudioSource audioSource; // 🎵 AudioSource để phát âm thanh
+    public AudioClip shootSound; // 🔊 Âm thanh bắn tên
 
 
     private int TargetIndex = -1;
@@ -160,6 +161,10 @@ public class PlayerTargeting : MonoBehaviour
     }
     public void ShootArrowFromAnimation()
     {
+        if (shootSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootSound); // 🔥 Phát âm thanh khi bắn
+        }
         ShootArrow(false); // Gọi hàm chính và đánh dấu đây không phải Multishot
     }
 

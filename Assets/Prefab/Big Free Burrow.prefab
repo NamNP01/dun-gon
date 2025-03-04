@@ -5561,13 +5561,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad2d881e0ddd7042b6f3945177a7962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: e6849b3ccb50b4e4baf8d6796713944d, type: 2}
   playerData: {fileID: 11400000, guid: 1d5062e2e07fb4c47a025467560eb3c1, type: 2}
   hpBar: {fileID: 4194624638218033744}
   damagePopupPrefab: {fileID: 4080443137243303530, guid: c24e09737ffb59843b4e98b147380a35, type: 3}
-  maxHP: 20000
   currentHP: 0
-  Damage: 120
-  expReward: 1
 --- !u!114 &8573139042710233053
 MonoBehaviour:
   m_ObjectHideFlags: 0

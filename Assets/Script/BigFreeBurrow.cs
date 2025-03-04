@@ -75,6 +75,7 @@ public class BigFreeBurrow : MonoBehaviour
         // Nếu mất 2000 HP so với lần cuối lưu, tạo bản sao
     if (enemyHP != null && (lastHP - enemyHP.currentHP) >= hpThreshold)
         {
+            Debug.LogWarning("!");
             lastHP = enemyHP.currentHP;
             DuplicateSelf();
         }
@@ -133,6 +134,7 @@ public class BigFreeBurrow : MonoBehaviour
 
     void DuplicateSelf()
     {
+        Debug.Log("!");
         GameObject duplicate = Instantiate(duplicatePrefab, PointDuplicate.position, Quaternion.identity);
 
         if (transform.parent != null && transform.parent.parent != null)

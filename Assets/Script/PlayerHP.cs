@@ -2,14 +2,29 @@
 
 public class PlayerHP : MonoBehaviour
 {
+    public static PlayerHP Instance { get; private set; } // ✅ Singleton
     public PlayerHpBar hpBar;
     public PlayerData playerData; // 🛑 Thêm biến tham chiếu PlayerData
     public int currentHP;
     public GameObject damagePopupPrefab;
 
+    public ParticleSystem levelUpVFX; // 🌟 Tham chiếu đến VFX khi thăng cấp
+
+
 
     public GameObject GameOver;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         if (playerData != null)
@@ -104,4 +119,31 @@ public class PlayerHP : MonoBehaviour
         Time.timeScale = 0f;
         GameOver.SetActive(true);
     }
+    public void Heal(int healAmount)
+    {
+        currentHP += healAmount;
+        currentHP = Mathf.Min(currentHP, playerData.HP); // Không vượt quá HP tối đa
+
+        if (hpBar != null)
+        {
+            hpBar.currentHp = currentHP; // Cập nhật thanh máu
+            hpBar.UpdateHpText();
+        }
+
+        Debug.Log($"💚 Player được hồi {healAmount} HP, HP hiện tại: {currentHP}");
+    }
+
+    public void PlayLevelUpVFX()
+    {
+        if (levelUpVFX != null)
+        {
+            levelUpVFX.Play();
+        }
+        else
+        {
+            Debug.LogWarning("⚠ levelUpVFX chưa được gán trong PlayerHP!");
+        }
+    }
+
+
 }

@@ -973,7 +973,7 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 1d5062e2e07fb4c47a025467560eb3c1, type: 2}
   hpBar: {fileID: 4964872136854253097}
   damagePopupPrefab: {fileID: 4080443137243303530, guid: c24e09737ffb59843b4e98b147380a35, type: 3}
-  maxHP: 1200
+  maxHP: 1000
   currentHP: 0
   Damage: 120
   expReward: 1

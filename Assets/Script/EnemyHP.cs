@@ -22,6 +22,7 @@ public class EnemyHP : MonoBehaviour
 
     void Start()
     {
+        PlayerData.OnLevelUp += BoostStats; // Đăng ký sự kiện level up
         bigFreeBurrow = GetComponent<BigFreeBurrow>();
 
         currentHP = maxHP; // Khởi tạo máu ban đầu
@@ -29,6 +30,23 @@ public class EnemyHP : MonoBehaviour
         {
             hpBar.SetMaxHP(maxHP); // Gửi maxHP cho hpBar
         }
+    }
+    private void OnDestroy()
+    {
+        PlayerData.OnLevelUp -= BoostStats; // Hủy đăng ký khi enemy bị xóa
+    }
+    private void BoostStats()
+    {
+        maxHP = Mathf.RoundToInt(maxHP * 1.3f);  // Tăng 30% máu
+        currentHP = Mathf.RoundToInt(currentHP * 1.3f);
+        Damage = Mathf.RoundToInt(Damage * 1.3f); // Tăng 30% sát thương
+
+        if (hpBar != null)
+        {
+            hpBar.SetMaxHP(maxHP);
+        }
+
+        Debug.Log($"🔥 Enemy {gameObject.name} boosted! New HP: {maxHP}, Damage: {Damage}");
     }
 
     public void TakeDamage(int damage, bool isCriticalHit)

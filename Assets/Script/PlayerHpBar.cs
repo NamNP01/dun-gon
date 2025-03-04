@@ -49,9 +49,14 @@ public class PlayerHpBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = player.position + hpBarOffset;
-        hpBar.value = currentHp / playerData.HP;
+        if (player != null)
+        {
+            transform.position = player.position + hpBarOffset;
+        }
+
+        hpBar.value = (float)currentHp / playerData.HP;
     }
+
 
     public void GetHpBoost(int hpAmount)
     {

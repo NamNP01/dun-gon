@@ -11,7 +11,11 @@ public enum AbilityType
     SideArrowsPlusOne, // 🏹 Bắn thêm 2 mũi tên góc 90° và -90°
     RearArrowPlusOne, // 🏹 Bắn thêm 1 mũi tên góc 180°
     PiercingShot, // 🏹 Bắn xuyên quái, giảm 33% sát thương sau mỗi lần xuyên
-    BouncyWall // 🏹 Mũi tên bật lại khi chạm tường, giảm 50% damage
+    BouncyWall, // 🏹 Mũi tên bật lại khi chạm tường, giảm 50% damage
+    Heal,
+    CritMasterMinor,       // ✅ Crit Master (Minor)
+    AttackBoostMinor,      // ✅ Attack Boost (Minor)
+    AttackSpeedBoostMinor  // ✅ Attack Speed Boost (Minor)
 }
 [CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Create New Ability")]
 public class AbilityData : ScriptableObject
